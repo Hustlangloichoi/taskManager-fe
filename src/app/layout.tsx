@@ -20,22 +20,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <AuthSyncProvider>
-            <div className="min-h-screen bg-background">
-              <Header />
-              <main className="container mx-auto px-4 py-8">{children}</main>
-            </div>
-          </AuthSyncProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <AuthSyncProvider>
+        <div className={"min-h-screen bg-background " + inter.className}>
+          <Header />
+          <main className="container mx-auto px-4 py-8">{children}</main>
+        </div>
+      </AuthSyncProvider>
+    </ThemeProvider>
   );
 }
