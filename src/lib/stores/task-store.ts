@@ -50,7 +50,7 @@ const filterTasks = (
       const fromDate = dateRange.from!;
       const toDate = dateRange.to || dateRange.from;
 
-      return taskDate >= fromDate && taskDate <= toDate;
+      return taskDate >= fromDate && (toDate ? taskDate <= toDate : true);
     });
   }
 
@@ -83,7 +83,8 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       const filteredTasks = filterTasks(tasks, searchTerm, dateRange);
       set({ tasks, filteredTasks, isLoading: false });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch tasks';
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to fetch tasks";
       set({ error: errorMessage, isLoading: false });
     }
   },
@@ -98,7 +99,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await fetch(api.tasks.create, {
-        method: 'POST',
+        method: "POST",
         headers: createAuthHeaders(token),
         body: JSON.stringify(taskData),
       });
@@ -109,7 +110,8 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       const filteredTasks = filterTasks(updatedTasks, searchTerm, dateRange);
       set({ tasks: updatedTasks, filteredTasks, isLoading: false });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create task';
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to create task";
       set({ error: errorMessage, isLoading: false });
     }
   },
@@ -124,7 +126,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await fetch(api.tasks.update(id), {
-        method: 'PUT',
+        method: "PUT",
         headers: createAuthHeaders(token),
         body: JSON.stringify(updates),
       });
@@ -137,7 +139,8 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       const filteredTasks = filterTasks(updatedTasks, searchTerm, dateRange);
       set({ tasks: updatedTasks, filteredTasks, isLoading: false });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update task';
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to update task";
       set({ error: errorMessage, isLoading: false });
     }
   },
@@ -161,7 +164,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
     try {
       const response = await fetch(api.tasks.update(id), {
-        method: 'PUT',
+        method: "PUT",
         headers: createAuthHeaders(token),
         body: JSON.stringify({ status }),
       });
@@ -170,12 +173,17 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       const updatedTasks = tasks.map((task) =>
         task.id === id ? updatedTask : task
       );
-      const updatedFilteredTasks = filterTasks(updatedTasks, searchTerm, dateRange);
+      const updatedFilteredTasks = filterTasks(
+        updatedTasks,
+        searchTerm,
+        dateRange
+      );
       set({ tasks: updatedTasks, filteredTasks: updatedFilteredTasks });
     } catch (error) {
       // Revert on error
       const filteredTasksReverted = filterTasks(tasks, searchTerm, dateRange);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update task status';
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to update task status";
       set({
         tasks,
         filteredTasks: filteredTasksReverted,
@@ -199,7 +207,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
     try {
       const response = await fetch(api.tasks.delete(id), {
-        method: 'DELETE',
+        method: "DELETE",
         headers: createAuthHeaders(token),
       });
 
@@ -207,7 +215,8 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     } catch (error) {
       // Revert on error
       const filteredTasksReverted = filterTasks(tasks, searchTerm, dateRange);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete task';
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to delete task";
       set({
         tasks,
         filteredTasks: filteredTasksReverted,
