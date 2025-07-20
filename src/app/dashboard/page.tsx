@@ -22,9 +22,7 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>
           <p className="text-muted-foreground">
-            {user
-              ? `Welcome back, ${user.name || user.email}`
-              : "Welcome back!"}
+            Welcome back, {user?.name || user?.email || "User"}
           </p>
         </div>
         <Button onClick={() => setIsTaskDialogOpen(true)}>

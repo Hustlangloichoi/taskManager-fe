@@ -48,9 +48,9 @@ const filterTasks = (
       if (!task.dueDate) return false;
       const taskDate = new Date(task.dueDate);
       const fromDate = dateRange.from!;
-      const toDate = dateRange.to || dateRange.from;
+      const toDate = dateRange.to ?? dateRange.from!;
 
-      return taskDate >= fromDate && (toDate ? taskDate <= toDate : true);
+      return taskDate >= fromDate && taskDate <= toDate;
     });
   }
 
